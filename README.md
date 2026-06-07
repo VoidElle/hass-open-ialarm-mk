@@ -4,7 +4,7 @@
   <h1>🔒 Open iAlarm-MK</h1>
   <p><em>Home Assistant integration for iAlarm-MK alarm panels via local API</em></p>
   <br>
-  <a href="https://github.com/VoidElle/open-ialarm-mk-local-api"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.0-blue?style=flat-square&logo=github" alt="open-ialarm-mk-local-api"></a>
+  <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.0-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk-7?style=flat-square&label=version" alt="version"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/blob/master/LICENSE"><img src="https://img.shields.io/github/license/VoidElle/hass-open-ialarm-mk-7?style=flat-square" alt="license"></a>
   <br>
