@@ -1,0 +1,15 @@
+{
+  "domain": "open_ialarm_mk",
+  "name": "iAlarm-MK",
+  "codeowners": ["@VoidElle"],
+  "config_flow": true,
+  "documentation": "https://github.com/VoidElle/hass-open-ialarm-mk-7",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/VoidElle/hass-open-ialarm-mk-7/issues",
+  "loggers": ["open_ialarm_mk"],
+  "requirements": [
+    "open-ialarm-mk-local-api @ git+https://github.com/VoidElle/open-ialarm-mk-local-api@main"
+  ],
+  "single_config_entry": true,
+  "version": "1.0.0"
+}

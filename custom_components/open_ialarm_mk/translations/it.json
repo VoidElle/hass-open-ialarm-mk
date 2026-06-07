@@ -1,0 +1,38 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connetti a iAlarm-MK",
+        "description": "Inserisci i dati di rete del tuo pannello iAlarm-MK.",
+        "data": {
+          "host": "Host (indirizzo IP)",
+          "port": "Porta",
+          "username": "Nome utente",
+          "password": "Password",
+          "scan_interval": "Intervallo di polling (secondi)"
+        }
+      },
+      "reconfigure": {
+        "title": "Riconfigura iAlarm-MK",
+        "description": "Aggiorna i dati di connessione del tuo pannello iAlarm-MK.",
+        "data": {
+          "host": "Host (indirizzo IP)",
+          "port": "Porta",
+          "username": "Nome utente",
+          "password": "Password",
+          "scan_interval": "Intervallo di polling (secondi)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi al pannello. Verifica host, porta e rete.",
+      "invalid_auth": "Nome utente o password non validi.",
+      "unknown": "Si e' verificato un errore imprevisto."
+    },
+    "abort": {
+      "already_configured": "Questo pannello iAlarm-MK e' gia' configurato.",
+      "reconfigure_successful": "Riconfigurazione completata.",
+      "unique_id_mismatch": "L'indirizzo MAC del pannello non corrisponde alla voce esistente."
+    }
+  }
+}

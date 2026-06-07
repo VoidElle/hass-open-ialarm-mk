@@ -1,0 +1,38 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to iAlarm-MK",
+        "description": "Enter the local network details of your iAlarm-MK panel.",
+        "data": {
+          "host": "Host (IP address)",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password",
+          "scan_interval": "Poll interval (seconds)"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure iAlarm-MK",
+        "description": "Update the connection details for your iAlarm-MK panel.",
+        "data": {
+          "host": "Host (IP address)",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password",
+          "scan_interval": "Poll interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the panel. Check host, port and network.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This iAlarm-MK panel is already configured.",
+      "reconfigure_successful": "Reconfiguration successful.",
+      "unique_id_mismatch": "The panel MAC address does not match the existing entry."
+    }
+  }
+}
