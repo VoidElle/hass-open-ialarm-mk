@@ -5,14 +5,14 @@
   <p><em>Home Assistant integration for iAlarm-MK alarm panels via local API</em></p>
   <br>
   <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.0-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk-7?style=flat-square&label=version" alt="version"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/blob/master/LICENSE"><img src="https://img.shields.io/github/license/VoidElle/hass-open-ialarm-mk-7?style=flat-square" alt="license"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk?style=flat-square&label=version" alt="version"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk/blob/master/LICENSE"><img src="https://img.shields.io/github/license/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="license"></a>
   <br>
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=home-assistant-community-store" alt="HACS"></a>
   <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-%E2%89%A52024.1-41BDF5?style=flat-square&logo=home-assistant" alt="Home Assistant"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7"><img src="https://img.shields.io/badge/IoT%20class-Local%20Polling-green?style=flat-square" alt="IoT class"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/stargazers"><img src="https://img.shields.io/github/stars/VoidElle/hass-open-ialarm-mk-7?style=flat-square" alt="stars"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/commits"><img src="https://img.shields.io/github/last-commit/VoidElle/hass-open-ialarm-mk-7?style=flat-square" alt="last commit"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk"><img src="https://img.shields.io/badge/IoT%20class-Local%20Polling-green?style=flat-square" alt="IoT class"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk/stargazers"><img src="https://img.shields.io/github/stars/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="stars"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk/commits"><img src="https://img.shields.io/github/last-commit/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="last commit"></a>
 </div>
 
 
@@ -28,7 +28,7 @@ Communicates **entirely over your local network** via direct TCP connection to t
 
 ### Via HACS (Recommended) ⭐
 
-[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=VoidElle&repository=hass-open-ialarm-mk-7&category=integration)
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=VoidElle&repository=hass-open-ialarm-mk&category=integration)
 
 ### Via HACS (Manual)
 
@@ -36,7 +36,7 @@ Communicates **entirely over your local network** via direct TCP connection to t
     - Open HACS in your Home Assistant interface
     - Go to "Integrations" tab
     - Click on the three dots in the top right corner and select "Custom repositories"
-    - Enter the repository URL: `https://github.com/VoidElle/hass-open-ialarm-mk-7`
+    - Enter the repository URL: `https://github.com/VoidElle/hass-open-ialarm-mk`
     - Select "Integration" as the category
     - Click "Add"
 
@@ -131,9 +131,9 @@ Device class is auto-detected from zone type and name keywords:
 Contributions are welcome!
 
 ### How to Help
-- 🐛 **Report bugs** via [GitHub Issues](https://github.com/VoidElle/hass-open-ialarm-mk-7/issues)
+- 🐛 **Report bugs** via [GitHub Issues](https://github.com/VoidElle/hass-open-ialarm-mk/issues)
 - 🌍 **Translate** to more languages
-- 🔧 **Submit PRs** for improvements via [GitHub Pull Requests](https://github.com/VoidElle/hass-open-ialarm-mk-7/pulls)
+- 🔧 **Submit PRs** for improvements via [GitHub Pull Requests](https://github.com/VoidElle/hass-open-ialarm-mk/pulls)
 - 📖 **Improve documentation**
 
 ### Development
