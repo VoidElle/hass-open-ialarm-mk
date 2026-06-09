@@ -50,6 +50,12 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         self.client = client
         self.network_info = network_info
         self.entry = entry
+        self.client.on_event = self._on_panel_event
+
+    def _on_panel_event(self, event: dict) -> None:
+        """Called from a SyncWorker thread when the panel pushes an unsolicited event."""
+        _LOGGER.debug("Panel push event received on command connection: %s", event)
+        asyncio.run_coroutine_threadsafe(self.async_request_refresh(), self.hass.loop)
 
     async def _async_update_data(self) -> IAlarmMkData:
         try:
