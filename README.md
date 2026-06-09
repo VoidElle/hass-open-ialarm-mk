@@ -121,6 +121,20 @@ Device class is auto-detected from zone type and name keywords:
 | 6 | other | Smoke |
 | other | (any) | Opening |
 
+## Debugging / Logging 🪵
+
+To enable verbose logs for both the integration and the underlying local API, add this to your `configuration.yaml`:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.open_ialarm_mk: debug
+    open_ialarm_mk_local_api: debug
+```
+
+This surfaces all TCP communication, keepalive pings, reconnect attempts, and raw panel responses.
+
 ## Limitations ⚠️
 
 - Requires local network access (panel must be reachable from Home Assistant)

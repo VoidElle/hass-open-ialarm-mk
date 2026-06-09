@@ -1,5 +1,4 @@
 {
-  "name": "iAlarm-MK",
-  "render_readme": true,
-  "homeassistant": "2024.1.0"
+  "name": "Open iAlarm MK",
+  "render_readme": true
 }
