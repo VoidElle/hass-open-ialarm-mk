@@ -20,6 +20,7 @@ from open_ialarm_mk_local_api.models.network_info_model import NetworkInfoModel
 from open_ialarm_mk_local_api.models.zone_model import ZoneModel
 
 from .const import DOMAIN
+from .panel_events import resolve_cid_status
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,7 +58,18 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
     def _on_panel_event(self, event: dict) -> None:
         """Called from a SyncWorker thread when the panel pushes an unsolicited event."""
         _LOGGER.debug("Panel push event received on command connection: %s", event)
-        asyncio.run_coroutine_threadsafe(self.async_request_refresh(), self.hass.loop)
+        asyncio.run_coroutine_threadsafe(
+            self._async_handle_panel_event(event), self.hass.loop
+        )
+
+    async def _async_handle_panel_event(self, event: dict) -> None:
+        """Decode push event CID, immediately update HA state, then confirm with a poll."""
+        new_status = resolve_cid_status(event)
+        if new_status is not None and self.data is not None:
+            self.async_set_updated_data(
+                IAlarmMkData(status=AlarmStatusModel(status=new_status), zones=self.data.zones)
+            )
+        await self.async_refresh()
 
     async def _async_update_data(self) -> IAlarmMkData:
         try:
@@ -79,7 +91,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             _LOGGER.debug("Error during disconnect: %s", err)
 
     # ------------------------------------------------------------------
-    # Alarm control commands — each requests a coordinator refresh after
+    # Alarm control commands
     # ------------------------------------------------------------------
 
     async def async_arm_away(self) -> None:
