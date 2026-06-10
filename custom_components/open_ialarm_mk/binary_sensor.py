@@ -77,7 +77,7 @@ class IAlarmMkZoneSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEnt
             identifiers={(DOMAIN, self.coordinator.network_info.mac)},
             name=self.coordinator.network_info.name or "iAlarm-MK",
             manufacturer="Antifurto365 / Meian Technology",
-            model="iAlarm-MK",
+            model=f"iAlarm {self.coordinator.model}",
         )
 
     @property

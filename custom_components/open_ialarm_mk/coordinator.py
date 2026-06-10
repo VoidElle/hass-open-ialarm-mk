@@ -40,6 +40,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         client: IAlarmMkClient,
         network_info: NetworkInfoModel,
         scan_interval: int,
+        model: str = "MK7",
     ) -> None:
         super().__init__(
             hass,
@@ -49,6 +50,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         )
         self.client = client
         self.network_info = network_info
+        self.model = model
         self.entry = entry
         self.client.on_event = self._on_panel_event
 

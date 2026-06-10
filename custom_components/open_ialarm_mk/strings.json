@@ -9,6 +9,7 @@
           "port": "Port",
           "username": "Username",
           "password": "Password",
+          "model": "Panel model",
           "scan_interval": "Poll interval (seconds)"
         }
       },
@@ -20,6 +21,7 @@
           "port": "Port",
           "username": "Username",
           "password": "Password",
+          "model": "Panel model",
           "scan_interval": "Poll interval (seconds)"
         }
       }

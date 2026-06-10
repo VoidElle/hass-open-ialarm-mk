@@ -11,7 +11,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 
 from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError
 
-from .const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
+from .const import CONF_SCAN_INTERVAL, CONF_MODEL, DEFAULT_MODEL, DOMAIN
 from .coordinator import IAlarmMkCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,6 +25,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     username = entry.data[CONF_USERNAME]
     password = entry.data[CONF_PASSWORD]
     scan_interval = entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
+    model = entry.data.get(CONF_MODEL, DEFAULT_MODEL)
 
     client = IAlarmMkClient(host, port, username, password, keepalive_interval=None)
 
@@ -41,7 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await _safe_disconnect(client)
         raise ConfigEntryNotReady(f"Unexpected error connecting to {host}:{port}") from err
 
-    coordinator = IAlarmMkCoordinator(hass, entry, client, network_info, scan_interval)
+    coordinator = IAlarmMkCoordinator(hass, entry, client, network_info, scan_interval, model)
 
     try:
         await coordinator.async_config_entry_first_refresh()

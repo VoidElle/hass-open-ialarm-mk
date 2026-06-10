@@ -13,7 +13,7 @@ from homeassistant.helpers.device_registry import format_mac
 
 from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError
 
-from .const import CONF_SCAN_INTERVAL, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DOMAIN
+from .const import CONF_SCAN_INTERVAL, CONF_MODEL, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DEFAULT_MODEL, DOMAIN, SUPPORTED_MODELS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -23,6 +23,7 @@ _STEP_USER_SCHEMA = vol.Schema(
         vol.Required(CONF_PORT, default=DEFAULT_PORT): vol.Coerce(int),
         vol.Required(CONF_USERNAME): str,
         vol.Required(CONF_PASSWORD): str,
+        vol.Required(CONF_MODEL, default=DEFAULT_MODEL): vol.In(SUPPORTED_MODELS),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
             vol.Coerce(int), vol.Range(min=10, max=300)
         ),
@@ -30,16 +31,16 @@ _STEP_USER_SCHEMA = vol.Schema(
 )
 
 
-async def _validate_and_get_mac(
+async def _validate_and_get_info(
     host: str, port: int, username: str, password: str
-) -> str:
-    """Connect to the panel, retrieve MAC, then disconnect. Raises on failure."""
+) -> tuple[str, str]:
+    """Connect to the panel, retrieve MAC and name, then disconnect. Raises on failure."""
     client = IAlarmMkClient(host, port, username, password, keepalive_interval=None)
     try:
         async with asyncio.timeout(15):
             await client.connect()
             info = await client.get_network_info()
-            return format_mac(info.mac)
+            return format_mac(info.mac), info.name or "iAlarm-MK"
     finally:
         try:
             await client.disconnect()
@@ -64,7 +65,7 @@ class IAlarmMk7ConfigFlow(ConfigFlow, domain=DOMAIN):
             password = user_input[CONF_PASSWORD]
 
             try:
-                mac = await _validate_and_get_mac(host, port, username, password)
+                mac, name = await _validate_and_get_info(host, port, username, password)
             except IAlarmMkLoginError:
                 errors["base"] = "invalid_auth"
             except (IAlarmMkConnectionError, TimeoutError, OSError):
@@ -76,7 +77,7 @@ class IAlarmMk7ConfigFlow(ConfigFlow, domain=DOMAIN):
                 await self.async_set_unique_id(mac)
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
-                    title=user_input[CONF_HOST],
+                    title=name,
                     data=user_input,
                 )
 
@@ -101,7 +102,7 @@ class IAlarmMk7ConfigFlow(ConfigFlow, domain=DOMAIN):
             password = user_input[CONF_PASSWORD]
 
             try:
-                mac = await _validate_and_get_mac(host, port, username, password)
+                mac, name = await _validate_and_get_info(host, port, username, password)
             except IAlarmMkLoginError:
                 errors["base"] = "invalid_auth"
             except (IAlarmMkConnectionError, TimeoutError, OSError):
