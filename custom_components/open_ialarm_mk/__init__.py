@@ -11,7 +11,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 
 from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError
 
-from .const import CONF_SCAN_INTERVAL, CONF_MODEL, DEFAULT_MODEL, DOMAIN
+from .const import CONF_SCAN_INTERVAL, CONF_MODEL, DEFAULT_MODEL, DEFAULT_SCAN_INTERVAL, DOMAIN
 from .coordinator import IAlarmMkCoordinator
 
 _LOGGER = logging.getLogger(__name__)
