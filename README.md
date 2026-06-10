@@ -22,7 +22,7 @@ Communicates **entirely over your local network** via direct TCP connection to t
 
 > [!NOTE]
 > Support has been confirmed on **MK7** panels. Other MK variants may work but have not been tested.
-> For MK2, see [mistermax80/ialarm_mk2](https://github.com/mistermax80/ialarm_mk2).
+> For confirmed MK2 support, see [mistermax80/ialarm_mk2](https://github.com/mistermax80/ialarm_mk2).
 
 ## Installation 📦
 
