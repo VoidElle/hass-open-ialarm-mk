@@ -91,7 +91,12 @@ class IAlarmMkZoneSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEnt
 
     @property
     def available(self) -> bool:
-        return self.coordinator.last_update_success and self._zone is not None
+        zone = self._zone
+        if zone is None:
+            return False
+        return self.coordinator.last_update_success and bool(
+            zone.status & ZoneStatusEnum.IN_USE
+        )
 
     @property
     def is_on(self) -> bool | None:

@@ -121,6 +121,11 @@ Device class is auto-detected from zone type and name keywords:
 | 6 | other | Smoke |
 | other | (any) | Opening |
 
+> [!IMPORTANT]
+> Zone open/close state is only reported by the panel when **"Check magnets"** (zone monitoring) is enabled for that zone in the iAlarm app. When disabled, the sensor will show as **Unavailable** in Home Assistant - this is intentional, as the panel is not monitoring the zone and any reported state would be meaningless.
+>
+> **Trade-off:** enabling "Check magnets" gives real-time open/close state in Home Assistant, but the panel will block arming if any monitored zone is open. This is intentional panel firmware behaviour and cannot be bypassed by the integration.
+
 ## Debugging / Logging 🪵
 
 To enable verbose logs for both the integration and the underlying local API, add this to your `configuration.yaml`:

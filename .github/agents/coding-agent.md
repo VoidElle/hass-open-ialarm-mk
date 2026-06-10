@@ -1,4 +1,4 @@
-# Coding Agent Instructions — hass-open-ialarm-mk
+# Coding Agent Instructions - hass-open-ialarm-mk
 
 ## Project Overview
 
@@ -14,7 +14,7 @@ Home Assistant custom integration for **iAlarm-MK** alarm panels (confirmed on M
 ```
 custom_components/open_ialarm_mk/
   __init__.py          # Entry setup/unload, ConfigEntry lifecycle
-  coordinator.py       # DataUpdateCoordinator — polls status + zones, exposes arm/disarm commands
+  coordinator.py       # DataUpdateCoordinator - polls status + zones, exposes arm/disarm commands
   alarm_control_panel.py
   binary_sensor.py
   config_flow.py       # UI config + reconfigure flows
@@ -29,10 +29,10 @@ custom_components/open_ialarm_mk/
 ### Home Assistant Integration Standards
 - Follow [HA developer guidelines](https://developers.home-assistant.io/).
 - All I/O must be async. Never block the event loop.
-- Use `DataUpdateCoordinator` for all polling — do not poll in entity `async_update`.
+- Use `DataUpdateCoordinator` for all polling - do not poll in entity `async_update`.
 - Raise `ConfigEntryNotReady` on connection failure during setup.
 - Raise `UpdateFailed` inside `_async_update_data` on poll errors.
-- Register entities via `async_forward_entry_setups` — never directly.
+- Register entities via `async_forward_entry_setups` - never directly.
 - Use `entry.async_on_unload` for cleanup hooks.
 
 ### Local API (`open-ialarm-mk-local-api`)
@@ -58,7 +58,7 @@ IAlarmMkClient(host, port, username, password, timeout=10.0, keepalive_interval=
 ```
 - HA uses `keepalive_interval=None` (coordinator polling replaces keepalive).
 - Supports async context manager (`async with`).
-- Internal `asyncio.Lock` serialises all commands — concurrent callers are safe.
+- Internal `asyncio.Lock` serialises all commands - concurrent callers are safe.
 - Auto-reconnects once on `IAlarmMkConnectionError` before re-raising.
 
 **`IAlarmMkClient` methods:**
@@ -110,7 +110,7 @@ LOSS = 1 << 5
 **Protocol internals (Meian XML over TCP):**
 - XPath-keyed XML frames, length-prefixed values (`STR`, `S32`, `BOL`, `PWD`, `TYP`, etc.).
 - XPath constants live in `_internal/paths.py`.
-- Never depend on `_internal` from the HA integration — use the public API only.
+- Never depend on `_internal` from the HA integration - use the public API only.
 
 ### Coordinator (`IAlarmMkCoordinator`)
 - Polls `get_status()` + `get_zones()` in parallel with `asyncio.gather`.
@@ -122,7 +122,7 @@ LOSS = 1 << 5
 - Config keys: `CONF_HOST`, `CONF_PORT`, `CONF_USERNAME`, `CONF_PASSWORD` (from HA), `CONF_SCAN_INTERVAL` (custom).
 - Defaults: `DEFAULT_PORT = 8000`, `DEFAULT_SCAN_INTERVAL = 30`.
 - Scan interval valid range: 10–300 seconds.
-- `single_config_entry: true` — only one panel per HA instance.
+- `single_config_entry: true` - only one panel per HA instance.
 
 ### Entities
 - **Alarm control panel** states: `armed_away`, `armed_home`, `armed_custom_bypass`, `disarmed`, `triggered`, `arming`, `unavailable`.
@@ -133,13 +133,13 @@ LOSS = 1 << 5
 - Python 3.12+, async/await throughout.
 - `from __future__ import annotations` in every module.
 - Logger: `_LOGGER = logging.getLogger(__name__)`.
-- No `configuration.yaml` support — UI-only config flow.
+- No `configuration.yaml` support - UI-only config flow.
 - Keep strings in `strings.json` + `translations/`; never hardcode UI text.
 
 ## Adding a New Platform
 1. Add the `Platform.*` constant to `PLATFORMS` in `__init__.py`.
 2. Create `<platform>.py` following existing `alarm_control_panel.py` / `binary_sensor.py` patterns.
-3. Entities read data from `coordinator.data` — never call the client directly from an entity.
+3. Entities read data from `coordinator.data` - never call the client directly from an entity.
 
 ## Testing & Validation
 - Run against a real MK7 panel or a mock TCP server implementing the iAlarm-MK protocol.
