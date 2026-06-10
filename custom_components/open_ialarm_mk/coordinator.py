@@ -82,20 +82,20 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
 
     async def async_arm_away(self) -> None:
         await self.client.arm_away()
-        await self.async_request_refresh()
+        await self.async_refresh()
 
     async def async_arm_stay(self) -> None:
         await self.client.arm_stay()
-        await self.async_request_refresh()
+        await self.async_refresh()
 
     async def async_arm_partial(self) -> None:
         await self.client.arm_partial()
-        await self.async_request_refresh()
+        await self.async_refresh()
 
     async def async_disarm(self) -> None:
         await self.client.disarm()
-        await self.async_request_refresh()
+        await self.async_refresh()
 
     async def async_cancel_alarm(self) -> None:
         await self.client.cancel_alarm()
-        await self.async_request_refresh()
+        await self.async_refresh()
