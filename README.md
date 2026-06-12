@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./assets/logo.png" alt="Logo" height="200">
   <br>
-  <h1>🔒 Open iAlarm-MK</h1>
+  <h1>🔒 Open iAlarm MK</h1>
   <p><em>Home Assistant integration for iAlarm-MK alarm panels via local API</em></p>
   <br>
   <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.3-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
