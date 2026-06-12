@@ -10,7 +10,7 @@
   <br>
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=home-assistant-community-store" alt="HACS"></a>
   <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-%E2%89%A52024.1-41BDF5?style=flat-square&logo=home-assistant" alt="Home Assistant"></a>
-  <a href="https://github.com/VoidElle/hass-open-ialarm-mk"><img src="https://img.shields.io/badge/IoT%20class-Local%20Polling-green?style=flat-square" alt="IoT class"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk"><img src="https://img.shields.io/badge/IoT%20class-Local%20Push%20%2B%20Polling-green?style=flat-square" alt="IoT class"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/stargazers"><img src="https://img.shields.io/github/stars/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="stars"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/commits"><img src="https://img.shields.io/github/last-commit/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="last commit"></a>
 </div>
@@ -83,9 +83,11 @@ To update credentials later, use **Reconfigure** from the integration page - no 
 - 🔒 **Alarm control panel** - arm away, arm home (stay), arm custom bypass (partial), disarm
 - 🚪 **Zone binary sensors** - one sensor per configured zone with automatic device class detection
 - 📡 **Fully local** - direct TCP connection to the panel, no internet required
-- 🔄 **Configurable poll interval** - 10 to 300 seconds
+- ⚡ **Real-time push events** - dedicated push TCP connection delivers alarm events instantly (triggered, armed, disarmed) without polling delay
+- 🔄 **Configurable poll interval** - 10 to 300 seconds (polling used as fallback/confirmation)
 - 🛠️ **Reconfigurable** - update host and credentials without removing the integration
 - 🆔 **Unique ID** - panel MAC address prevents duplicate entries
+- 🌍 **Localized error messages** - device rejection errors shown in your HA language
 
 ## Entities 🗂️
 
@@ -125,6 +127,17 @@ Device class is auto-detected from zone type and name keywords:
 > Zone open/close state is only reported by the panel when **"Check magnets"** (zone monitoring) is enabled for that zone in the iAlarm app. When disabled, the sensor will show as **Unavailable** in Home Assistant - this is intentional, as the panel is not monitoring the zone and any reported state would be meaningless.
 >
 > **Trade-off:** enabling "Check magnets" gives real-time open/close state in Home Assistant, but the panel will block arming if any monitored zone is open. This is intentional panel firmware behaviour and cannot be bypassed by the integration.
+
+### Diagnostic Entities
+
+The following entities are available under the device page (collapsed by default):
+
+| Entity | Type | Description |
+|---|---|---|
+| Command Connection | Binary sensor | Whether the command TCP connection is alive |
+| Push Connection | Binary sensor | Whether the real-time push TCP connection is alive |
+| Last Poll | Sensor | Timestamp of the last successful data poll |
+| Panel IP | Sensor | IP address reported by the panel |
 
 ## Debugging / Logging 🪵
 
