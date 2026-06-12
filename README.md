@@ -144,6 +144,102 @@ The following entities are available under the device page (collapsed by default
 
 A **Cancel Alarm** button entity is available on the device page. Pressing it sends a cancel command to the panel (silences the siren / cancels the triggered state). If the panel rejects the command, a "Device rejected the command" error is shown in Home Assistant.
 
+## Automation Examples 🤖
+
+Below are ready-to-use automation examples. Replace `alarm_control_panel.your_ialarm_mk` with your actual entity ID.
+
+The condition `trigger.from_state.state != 'unavailable'` prevents spurious notifications when Home Assistant restarts and the panel state transitions from `unavailable` to a real state.
+
+### Alarm triggered: send notification
+
+```yaml
+alias: Alarm - Triggered - Notify
+triggers:
+  - trigger: state
+    entity_id: alarm_control_panel.your_ialarm_mk
+    to: triggered
+conditions:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != 'unavailable' }}"
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "🚨 ALARM TRIGGERED!"
+      message: "Intrusion detected at home."
+```
+
+### Armed away: send notification
+
+```yaml
+alias: Alarm - Armed Away - Notify
+triggers:
+  - trigger: state
+    entity_id: alarm_control_panel.your_ialarm_mk
+    to: armed_away
+conditions:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != 'unavailable' }}"
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "🔒 Alarm armed"
+      message: "Panel is now active in AWAY mode."
+```
+
+### Armed home: send notification
+
+```yaml
+alias: Alarm - Armed Home - Notify
+triggers:
+  - trigger: state
+    entity_id: alarm_control_panel.your_ialarm_mk
+    to: armed_home
+conditions:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != 'unavailable' }}"
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "🔒 Alarm armed"
+      message: "Panel is now active in HOME mode."
+```
+
+### Armed custom bypass (partial): send notification
+
+```yaml
+alias: Alarm - Armed Custom Bypass - Notify
+triggers:
+  - trigger: state
+    entity_id: alarm_control_panel.your_ialarm_mk
+    to: armed_custom_bypass
+conditions:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != 'unavailable' }}"
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "🔒 Alarm armed"
+      message: "Panel is now active in CUSTOM / PARTIAL mode."
+```
+
+### Disarmed: send notification
+
+```yaml
+alias: Alarm - Disarmed - Notify
+triggers:
+  - trigger: state
+    entity_id: alarm_control_panel.your_ialarm_mk
+    to: disarmed
+conditions:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != 'unavailable' }}"
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "🔓 Alarm disarmed"
+      message: "Panel has been disarmed."
+```
+
 ## Debugging / Logging 🪵
 
 To enable verbose logs for both the integration and the underlying local API, add this to your `configuration.yaml`:
