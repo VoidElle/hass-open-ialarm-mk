@@ -4,12 +4,12 @@
   "codeowners": ["@VoidElle"],
   "config_flow": true,
   "documentation": "https://github.com/VoidElle/hass-open-ialarm-mk",
-  "iot_class": "local_polling",
+  "iot_class": "local_push",
   "issue_tracker": "https://github.com/VoidElle/hass-open-ialarm-mk/issues",
   "loggers": ["open_ialarm_mk", "open_ialarm_mk_local_api"],
   "requirements": [
     "open-ialarm-mk-local-api==1.0.4"
   ],
-  "single_config_entry": true,
-  "version": "1.0.1"
+  "single_config_entry": false,
+  "version": "1.0.2"
 }
