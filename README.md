@@ -4,7 +4,7 @@
   <h1>🔒 Open iAlarm-MK</h1>
   <p><em>Home Assistant integration for iAlarm-MK alarm panels via local API</em></p>
   <br>
-  <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.2-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
+  <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.3-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk?style=flat-square&label=version" alt="version"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/blob/master/LICENSE"><img src="https://img.shields.io/github/license/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="license"></a>
   <br>
@@ -81,6 +81,7 @@ To update credentials later, use **Reconfigure** from the integration page - no 
 ## Features ✨
 
 - 🔒 **Alarm control panel** - arm away, arm home (stay), arm custom bypass (partial), disarm
+- 🚨 **Cancel alarm button** - dedicated button to cancel an active alarm without fully disarming
 - 🚪 **Zone binary sensors** - one sensor per configured zone with automatic device class detection
 - 📡 **Fully local** - direct TCP connection to the panel, no internet required
 - ⚡ **Real-time push events** - dedicated push TCP connection delivers alarm events instantly (triggered, armed, disarmed) without polling delay
@@ -139,6 +140,10 @@ The following entities are available under the device page (collapsed by default
 | Last Poll | Sensor | Timestamp of the last successful data poll |
 | Panel IP | Sensor | IP address reported by the panel |
 
+### Cancel Alarm Button
+
+A **Cancel Alarm** button entity is available on the device page. Pressing it sends a cancel command to the panel (silences the siren / cancels the triggered state). If the panel rejects the command, a "Device rejected the command" error is shown in Home Assistant.
+
 ## Debugging / Logging 🪵
 
 To enable verbose logs for both the integration and the underlying local API, add this to your `configuration.yaml`:
@@ -156,7 +161,8 @@ This surfaces all TCP communication, keepalive pings, reconnect attempts, and ra
 ## Limitations ⚠️
 
 - Requires local network access (panel must be reachable from Home Assistant)
-- Zone sensors are registered once at startup; removing a zone requires reloading the integration
+- New zones added on the panel are picked up automatically on the next poll - no reload needed
+- Removed zones become **unavailable** automatically; the entity remains in the HA registry until manually deleted or the integration is reloaded
 
 ## Contributing 🤝
 
