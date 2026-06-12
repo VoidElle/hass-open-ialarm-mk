@@ -67,11 +67,9 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
     async def _async_handle_panel_event(self, event: dict) -> None:
         """Decode push event CID and update HA state.
 
-        If the CID maps to a known status, trust the push event as authoritative
-        and do NOT poll the device — a poll would race against the panel and
-        overwrite a transient state (e.g. TRIGGERED) before HA can act on it.
-        For unrecognised CIDs, fall back to a poll to let the device report its
-        current state.
+        Push events are authoritative — no poll after a known CID, as a poll
+        would race the panel and overwrite transient states before HA can act.
+        Unknown CIDs fall back to a poll.
         """
         new_status = resolve_cid_status(event)
         if new_status is not None and self.data is not None:

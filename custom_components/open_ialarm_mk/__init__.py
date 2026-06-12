@@ -6,7 +6,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, CONF_USERNAME, Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import ConfigEntryNotReady
 
 from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError
@@ -17,6 +17,11 @@ from .coordinator import IAlarmMkCoordinator
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[Platform] = [Platform.ALARM_CONTROL_PANEL, Platform.BINARY_SENSOR]
+
+SERVICE_SIMULATE_TRIGGERED = "simulate_triggered"
+
+# Fake push event that exercises the exact same code path as a real panel trigger.
+_SIMULATED_TRIGGER_EVENT = {"Cid": "1131", "Content": "Simulated trigger", "Zone": 0, "ZoneName": "Simulated", "Name": "SIM", "Err": None}
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -55,6 +60,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
 
+    async def _handle_simulate_triggered(call: ServiceCall) -> None:
+        _LOGGER.warning("simulate_triggered service called — FOR TESTING ONLY")
+        await coordinator._async_handle_panel_event(_SIMULATED_TRIGGER_EVENT)
+
+    hass.services.async_register(DOMAIN, SERVICE_SIMULATE_TRIGGERED, _handle_simulate_triggered)
+
     return True
 
 
@@ -63,6 +74,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if unload_ok:
         coordinator: IAlarmMkCoordinator = hass.data[DOMAIN].pop(entry.entry_id)
         await coordinator.async_shutdown()
+        hass.services.async_remove(DOMAIN, SERVICE_SIMULATE_TRIGGERED)
     return unload_ok
 
 
