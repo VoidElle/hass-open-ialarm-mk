@@ -8,7 +8,7 @@
   "issue_tracker": "https://github.com/VoidElle/hass-open-ialarm-mk/issues",
   "loggers": ["open_ialarm_mk", "open_ialarm_mk_local_api"],
   "requirements": [
-    "open-ialarm-mk-local-api==1.0.2"
+    "open-ialarm-mk-local-api==1.0.3"
   ],
   "single_config_entry": true,
   "version": "1.0.0"
