@@ -47,12 +47,16 @@ class IAlarmMkLastPollSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntit
         self._attr_unique_id = f"{coordinator.network_info.mac}_last_poll"
 
     @property
+    def available(self) -> bool:
+        return True
+
+    @property
     def device_info(self) -> DeviceInfo:
         return _device_info(self.coordinator)
 
     @property
     def native_value(self):
-        return self.coordinator.last_updated
+        return self.coordinator.last_successful_poll
 
 
 class IAlarmMkPanelIpSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
