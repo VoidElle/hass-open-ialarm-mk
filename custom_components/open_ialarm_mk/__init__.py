@@ -9,7 +9,7 @@ from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, CONF_USERNA
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError
+from open_ialarm_mk_local_api import IAlarmMkClient, IAlarmMkConnectionError, IAlarmMkLoginError, IAlarmMkPushClient
 
 from .const import CONF_SCAN_INTERVAL, CONF_MODEL, DEFAULT_MODEL, DEFAULT_SCAN_INTERVAL, DOMAIN
 from .coordinator import IAlarmMkCoordinator
@@ -59,6 +59,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
+
+    push_client = IAlarmMkPushClient(host, port, username, coordinator._on_push_event)
+    coordinator.start_push_client(push_client)
 
     async def _handle_simulate_triggered(call: ServiceCall) -> None:
         _LOGGER.warning("simulate_triggered service called — FOR TESTING ONLY")

@@ -16,6 +16,7 @@ from open_ialarm_mk_local_api import (
     IAlarmMkClient,
     IAlarmMkConnectionError,
     IAlarmMkLoginError,
+    IAlarmMkPushClient,
 )
 from open_ialarm_mk_local_api.models.alarm_status_model import AlarmStatusModel
 from open_ialarm_mk_local_api.models.network_info_model import NetworkInfoModel
@@ -55,21 +56,27 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         self.network_info = network_info
         self.model = model
         self.entry = entry
-        self.client.on_event = self._on_panel_event
+        self._push_client: IAlarmMkPushClient | None = None
+        self._push_task: asyncio.Task | None = None
 
-    def _on_panel_event(self, event: dict) -> None:
-        """Called from a SyncWorker thread when the panel pushes an unsolicited event."""
-        _LOGGER.debug("Panel push event received on command connection: %s", event)
-        asyncio.run_coroutine_threadsafe(
-            self._async_handle_panel_event(event), self.hass.loop
+    def _on_push_event(self, event: dict) -> None:
+        """Called from the asyncio event loop by the dedicated push client."""
+        _LOGGER.debug("Push event received on dedicated connection: %s", event)
+        self.hass.async_create_task(self._async_handle_panel_event(event))
+
+    def start_push_client(self, push_client: IAlarmMkPushClient) -> None:
+        """Store the push client and start its subscription task."""
+        self._push_client = push_client
+        self._push_task = self.hass.async_create_background_task(
+            push_client.subscribe(), "ialarm-mk-push"
         )
+        _LOGGER.debug("start_push_client: push subscription task started")
 
     async def _async_handle_panel_event(self, event: dict) -> None:
         """Decode push event CID and update HA state.
 
-        Push events are authoritative — no poll after a known CID, as a poll
-        would race the panel and overwrite transient states before HA can act.
-        Unknown CIDs fall back to a poll.
+        Push events from the dedicated connection are real-time — no batching,
+        no polling needed.  Unknown CIDs fall back to a poll.
         """
         new_status = resolve_cid_status(event)
         if new_status is not None and self.data is not None:
@@ -92,7 +99,11 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             raise UpdateFailed(f"Error polling iAlarm-MK: {err}") from err
 
     async def async_shutdown(self) -> None:
-        """Disconnect the panel client."""
+        """Stop the push subscription and disconnect the command client."""
+        if self._push_client is not None:
+            self._push_client.cancel()
+        if self._push_task is not None and not self._push_task.done():
+            self._push_task.cancel()
         try:
             await self.client.disconnect()
         except Exception as err:
@@ -151,3 +162,4 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                 translation_key="device_rejected_command",
             ) from err
         await self.async_refresh()
+
