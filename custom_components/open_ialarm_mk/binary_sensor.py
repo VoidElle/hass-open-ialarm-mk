@@ -47,20 +47,28 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator: IAlarmMkCoordinator = hass.data[DOMAIN][entry.entry_id]
+    known_zone_indices: set[int] = set()
 
-    entities: list[BinarySensorEntity] = [
+    def _add_new_zones() -> None:
+        if coordinator.data is None:
+            return
+        new_entities = []
+        for zone in coordinator.data.zones:
+            if zone.index in known_zone_indices:
+                continue
+            if (zone.status & ZoneStatusEnum.IN_USE) or zone.name:
+                known_zone_indices.add(zone.index)
+                new_entities.append(IAlarmMkZoneSensor(coordinator, zone))
+        if new_entities:
+            async_add_entities(new_entities)
+
+    async_add_entities([
         IAlarmMkCommandConnectionSensor(coordinator),
         IAlarmMkPushConnectionSensor(coordinator),
-    ]
+    ])
 
-    if coordinator.data is not None:
-        entities += [
-            IAlarmMkZoneSensor(coordinator, zone)
-            for zone in coordinator.data.zones
-            if (zone.status & ZoneStatusEnum.IN_USE) or zone.name
-        ]
-
-    async_add_entities(entities)
+    _add_new_zones()
+    entry.async_on_unload(coordinator.async_add_listener(lambda: _add_new_zones()))
 
 
 def _device_info(coordinator: IAlarmMkCoordinator) -> DeviceInfo:

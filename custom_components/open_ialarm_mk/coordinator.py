@@ -66,7 +66,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         """True when the dedicated push TCP connection is established."""
         if self._push_client is None:
             return False
-        t = self._push_client._transport
+        t = getattr(self._push_client, '_transport', None)
         return t is not None and not t.is_closing()
 
     def _on_push_event(self, event: dict) -> None:
