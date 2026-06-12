@@ -6,6 +6,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -47,16 +48,70 @@ async def async_setup_entry(
 ) -> None:
     coordinator: IAlarmMkCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    if coordinator.data is None:
-        return
-
-    # Only create sensors for zones that are in use or have a name configured
-    entities = [
-        IAlarmMkZoneSensor(coordinator, zone)
-        for zone in coordinator.data.zones
-        if (zone.status & ZoneStatusEnum.IN_USE) or zone.name
+    entities: list[BinarySensorEntity] = [
+        IAlarmMkCommandConnectionSensor(coordinator),
+        IAlarmMkPushConnectionSensor(coordinator),
     ]
+
+    if coordinator.data is not None:
+        entities += [
+            IAlarmMkZoneSensor(coordinator, zone)
+            for zone in coordinator.data.zones
+            if (zone.status & ZoneStatusEnum.IN_USE) or zone.name
+        ]
+
     async_add_entities(entities)
+
+
+def _device_info(coordinator: IAlarmMkCoordinator) -> DeviceInfo:
+    return DeviceInfo(
+        identifiers={(DOMAIN, coordinator.network_info.mac)},
+        name=coordinator.network_info.name or "iAlarm-MK",
+        manufacturer="Antifurto365 / Meian Technology",
+        model=f"iAlarm {coordinator.model}",
+    )
+
+
+class IAlarmMkCommandConnectionSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEntity):
+    """Diagnostic sensor: command TCP connection status."""
+
+    _attr_has_entity_name = True
+    _attr_name = "Command Connection"
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_command_connection"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.last_update_success
+
+
+class IAlarmMkPushConnectionSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEntity):
+    """Diagnostic sensor: push TCP connection status."""
+
+    _attr_has_entity_name = True
+    _attr_name = "Push Connection"
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_push_connection"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.push_connected
 
 
 class IAlarmMkZoneSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEntity):
@@ -73,12 +128,7 @@ class IAlarmMkZoneSensor(CoordinatorEntity[IAlarmMkCoordinator], BinarySensorEnt
 
     @property
     def device_info(self) -> DeviceInfo:
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.network_info.mac)},
-            name=self.coordinator.network_info.name or "iAlarm-MK",
-            manufacturer="Antifurto365 / Meian Technology",
-            model=f"iAlarm {self.coordinator.model}",
-        )
+        return _device_info(self.coordinator)
 
     @property
     def _zone(self) -> ZoneModel | None:

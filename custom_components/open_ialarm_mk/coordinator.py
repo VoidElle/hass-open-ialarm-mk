@@ -59,6 +59,14 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         self._push_client: IAlarmMkPushClient | None = None
         self._push_task: asyncio.Task | None = None
 
+    @property
+    def push_connected(self) -> bool:
+        """True when the dedicated push TCP connection is established."""
+        if self._push_client is None:
+            return False
+        t = self._push_client._transport
+        return t is not None and not t.is_closing()
+
     def _on_push_event(self, event: dict) -> None:
         """Called from the asyncio event loop by the dedicated push client."""
         _LOGGER.debug("Push event received on dedicated connection: %s", event)
