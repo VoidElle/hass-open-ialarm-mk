@@ -1,6 +1,6 @@
 {
   "domain": "open_ialarm_mk",
-  "name": "iAlarm-MK",
+  "name": "Open iAlarm MK",
   "codeowners": ["@VoidElle"],
   "config_flow": true,
   "documentation": "https://github.com/VoidElle/hass-open-ialarm-mk",
