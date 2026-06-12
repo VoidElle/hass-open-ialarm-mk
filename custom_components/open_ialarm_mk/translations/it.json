@@ -41,5 +41,12 @@
     "device_rejected_command": {
       "message": "Il dispositivo ha rifiutato il comando."
     }
+  },
+  "entity": {
+    "button": {
+      "cancel_alarm": {
+        "name": "Cancella Allarme"
+      }
+    }
   }
 }

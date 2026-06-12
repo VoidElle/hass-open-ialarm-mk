@@ -41,5 +41,12 @@
     "device_rejected_command": {
       "message": "Device rejected the command."
     }
+  },
+  "entity": {
+    "button": {
+      "cancel_alarm": {
+        "name": "Cancel Alarm"
+      }
+    }
   }
 }
