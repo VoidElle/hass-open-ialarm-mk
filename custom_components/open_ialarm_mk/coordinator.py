@@ -112,11 +112,35 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             self.last_successful_poll = dt_util.utcnow()
             return IAlarmMkData(status=status, zones=zones)
         except (IAlarmMkConnectionError, IAlarmMkLoginError) as err:
+            self._handle_poll_failure(err)
             raise UpdateFailed(f"Connection error polling iAlarm-MK: {err}") from err
         except UpdateFailed:
             raise
         except Exception as err:
+            self._handle_poll_failure(err)
             raise UpdateFailed(f"Error polling iAlarm-MK: {err}") from err
+
+    def _handle_poll_failure(self, err: Exception) -> None:
+        """Detect the command pairing-lock and self-heal via reload.
+
+        The panel accepts TCP connections but silently ignores Pair/Client
+        frames when it already has an active authenticated session (the push
+        client holds one).  That causes every command-client reconnect attempt
+        to time out while the push keepalive keeps succeeding.
+
+        Condition: poll failed AND push is still alive.
+        Action: schedule an integration reload, which cleanly closes both
+        sockets and re-authenticates from scratch - identical to a manual reload.
+        """
+        if self.push_connected:
+            _LOGGER.warning(
+                "Poll failed while push is alive — panel likely locked command pairing; "
+                "scheduling reload: %s",
+                err,
+            )
+            self.hass.async_create_task(
+                self.hass.config_entries.async_reload(self.entry.entry_id)
+            )
 
     async def async_shutdown(self) -> None:
         """Stop the push subscription and disconnect the command client."""
