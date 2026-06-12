@@ -13,6 +13,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from homeassistant.util import dt as dt_util
 
 from open_ialarm_mk_local_api import (
+    AlarmStatusEnum,
     IAlarmMkAlarmError,
     IAlarmMkClient,
     IAlarmMkConnectionError,
@@ -101,10 +102,19 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                 self.client.get_status(),
                 self.client.get_zones(),
             )
+            if status.status == AlarmStatusEnum.UNAVAILABLE:
+                _LOGGER.debug("Status UNAVAILABLE (panel transitioning), retrying in 2s")
+                await asyncio.sleep(2)
+                status = await self.client.get_status()
+                if status.status == AlarmStatusEnum.UNAVAILABLE:
+                    _LOGGER.warning("Status still UNAVAILABLE after retry, raising UpdateFailed")
+                    raise UpdateFailed("iAlarm-MK returned UNAVAILABLE status after retry")
             self.last_successful_poll = dt_util.utcnow()
             return IAlarmMkData(status=status, zones=zones)
         except (IAlarmMkConnectionError, IAlarmMkLoginError) as err:
             raise UpdateFailed(f"Connection error polling iAlarm-MK: {err}") from err
+        except UpdateFailed:
+            raise
         except Exception as err:
             raise UpdateFailed(f"Error polling iAlarm-MK: {err}") from err
 
