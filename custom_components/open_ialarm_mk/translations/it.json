@@ -36,5 +36,10 @@
       "reconfigure_successful": "Riconfigurazione completata.",
       "unique_id_mismatch": "L'indirizzo MAC del pannello non corrisponde alla voce esistente."
     }
+  },
+  "exceptions": {
+    "device_rejected_command": {
+      "message": "Il dispositivo ha rifiutato il comando."
+    }
   }
 }

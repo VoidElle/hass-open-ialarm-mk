@@ -8,9 +8,11 @@ from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from open_ialarm_mk_local_api import (
+    IAlarmMkAlarmError,
     IAlarmMkClient,
     IAlarmMkConnectionError,
     IAlarmMkLoginError,
@@ -95,21 +97,51 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
     # ------------------------------------------------------------------
 
     async def async_arm_away(self) -> None:
-        await self.client.arm_away()
+        try:
+            await self.client.arm_away()
+        except IAlarmMkAlarmError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="device_rejected_command",
+            ) from err
         await self.async_refresh()
 
     async def async_arm_stay(self) -> None:
-        await self.client.arm_stay()
+        try:
+            await self.client.arm_stay()
+        except IAlarmMkAlarmError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="device_rejected_command",
+            ) from err
         await self.async_refresh()
 
     async def async_arm_partial(self) -> None:
-        await self.client.arm_partial()
+        try:
+            await self.client.arm_partial()
+        except IAlarmMkAlarmError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="device_rejected_command",
+            ) from err
         await self.async_refresh()
 
     async def async_disarm(self) -> None:
-        await self.client.disarm()
+        try:
+            await self.client.disarm()
+        except IAlarmMkAlarmError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="device_rejected_command",
+            ) from err
         await self.async_refresh()
 
     async def async_cancel_alarm(self) -> None:
-        await self.client.cancel_alarm()
+        try:
+            await self.client.cancel_alarm()
+        except IAlarmMkAlarmError as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="device_rejected_command",
+            ) from err
         await self.async_refresh()

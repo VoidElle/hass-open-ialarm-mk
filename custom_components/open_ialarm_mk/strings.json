@@ -36,5 +36,10 @@
       "reconfigure_successful": "Reconfiguration successful.",
       "unique_id_mismatch": "The panel MAC address does not match the existing entry."
     }
+  },
+  "exceptions": {
+    "device_rejected_command": {
+      "message": "Device rejected the command."
+    }
   }
 }
