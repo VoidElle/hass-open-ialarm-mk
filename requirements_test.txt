@@ -1,4 +1,4 @@
-"""Test requirements for hass-open-ialarm-mk-7."""
+# Test requirements for hass-open-ialarm-mk-7.
 pytest-homeassistant-custom-component
 pytest-asyncio
 open-ialarm-mk-local-api==1.0.4
