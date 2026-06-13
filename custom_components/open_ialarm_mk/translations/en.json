@@ -47,6 +47,22 @@
       "cancel_alarm": {
         "name": "Cancel Alarm"
       }
+    },
+    "sensor": {
+      "last_poll": {
+        "name": "Last Poll"
+      },
+      "panel_ip": {
+        "name": "Panel IP"
+      }
+    },
+    "binary_sensor": {
+      "command_connection": {
+        "name": "Command Connection"
+      },
+      "push_connection": {
+        "name": "Push Connection"
+      }
     }
   }
 }

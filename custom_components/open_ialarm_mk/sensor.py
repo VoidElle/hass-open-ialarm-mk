@@ -38,7 +38,7 @@ class IAlarmMkLastPollSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntit
     """Timestamp of the last successful coordinator poll."""
 
     _attr_has_entity_name = True
-    _attr_name = "Last Poll"
+    _attr_translation_key = "last_poll"
     _attr_device_class = SensorDeviceClass.TIMESTAMP
     _attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -63,7 +63,7 @@ class IAlarmMkPanelIpSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity
     """Panel IP address."""
 
     _attr_has_entity_name = True
-    _attr_name = "Panel IP"
+    _attr_translation_key = "panel_ip"
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_icon = "mdi:ip-network"
 

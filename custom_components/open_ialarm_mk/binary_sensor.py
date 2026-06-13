@@ -84,7 +84,7 @@ class IAlarmMkCommandConnectionSensor(CoordinatorEntity[IAlarmMkCoordinator], Bi
     """Diagnostic sensor: command TCP connection status."""
 
     _attr_has_entity_name = True
-    _attr_name = "Command Connection"
+    _attr_translation_key = "command_connection"
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
     _attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -105,7 +105,7 @@ class IAlarmMkPushConnectionSensor(CoordinatorEntity[IAlarmMkCoordinator], Binar
     """Diagnostic sensor: push TCP connection status."""
 
     _attr_has_entity_name = True
-    _attr_name = "Push Connection"
+    _attr_translation_key = "push_connection"
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
     _attr_entity_category = EntityCategory.DIAGNOSTIC
 
