@@ -7,6 +7,7 @@
   <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.4-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk?style=flat-square&label=version" alt="version"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/blob/master/LICENSE"><img src="https://img.shields.io/github/license/VoidElle/hass-open-ialarm-mk?style=flat-square" alt="license"></a>
+  <a href="https://github.com/VoidElle/hass-open-ialarm-mk-7/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/VoidElle/hass-open-ialarm-mk-7/tests.yml?style=flat-square&label=tests" alt="tests"></a>
   <br>
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=home-assistant-community-store" alt="HACS"></a>
   <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-%E2%89%A52024.1-41BDF5?style=flat-square&logo=home-assistant" alt="Home Assistant"></a>
