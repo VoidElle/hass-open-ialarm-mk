@@ -2,7 +2,7 @@
   <img src="./assets/logo.png" alt="Logo" height="200">
   <br>
   <h1>🔒 Open iAlarm MK</h1>
-  <p><em>Home Assistant integration for iAlarm-MK alarm panels via local API</em></p>
+  <p><em>Home Assistant integration for iAlarm MK alarm panels via local API</em></p>
   <br>
   <a href="https://pypi.org/project/open-ialarm-mk-local-api/"><img src="https://img.shields.io/badge/open--ialarm--mk--local--api-v1.0.3-blue?style=flat-square&logo=pypi" alt="open-ialarm-mk-local-api"></a>
   <a href="https://github.com/VoidElle/hass-open-ialarm-mk/releases"><img src="https://img.shields.io/github/v/release/VoidElle/hass-open-ialarm-mk?style=flat-square&label=version" alt="version"></a>
@@ -16,7 +16,7 @@
 </div>
 
 
-Open iAlarm-MK is a Home Assistant integration that enables local control and monitoring of **iAlarm-MK** alarm panels through Home Assistant.
+Open iAlarm MK is a Home Assistant integration that enables local control and monitoring of **iAlarm MK** alarm panels through Home Assistant.
 
 Communicates **entirely over your local network** via direct TCP connection to the panel - no cloud, no P2P relay required.
 
@@ -42,7 +42,7 @@ Communicates **entirely over your local network** via direct TCP connection to t
 
 2. Install the integration:
    - In HACS Integrations, click + Explore & Download Repositories
-   - Search for "iAlarm-MK"
+   - Search for "Open IAlarm MK"
    - Click on the integration and then Download
    - Select the latest version and click Download
 
@@ -59,7 +59,7 @@ After installing and restarting Home Assistant:
 
 1. Go to **Settings -> Devices & Services**
 2. Click **+ Add Integration**
-3. Search for **"iAlarm-MK"**
+3. Search for **"Open IAlarm MK"**
 4. Fill in the connection form
 
 ## Configuration ⚙️
