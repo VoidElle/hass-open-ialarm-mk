@@ -276,3 +276,33 @@ Contributions are welcome!
 2. Create a feature branch: `git checkout -b feature/name`
 3. Follow [Home Assistant dev guidelines](https://developers.home-assistant.io/)
 4. Submit a PR with a clear description
+
+### Running Tests 🧪
+
+The integration ships with a full test suite (122 tests) covering all modules.
+
+**Install dependencies:**
+
+```bash
+pip install -r requirements_test.txt
+```
+
+**Run all tests:**
+
+```bash
+python -m pytest tests/ -v
+```
+
+**What's covered:**
+
+| Module | Tests |
+|---|---|
+| `panel_events` | All CID → status mappings + edge cases (None, string, invalid, zero, negative) |
+| `coordinator` | Poll logic, UNAVAILABLE retry, push client, panel event dispatch, all alarm commands, error wrapping, shutdown |
+| `config_flow` | User step (success / auth error / connect error / timeout / unknown / duplicate), reconfigure step |
+| `alarm_control_panel` | Full `_STATUS_MAP` coverage, entity attributes, all 4 command delegations |
+| `binary_sensor` | Zone device-class mapping (12 cases), command + push connection sensors, zone state / availability / attributes |
+| `sensor` | Panel IP sensor value, unique ID, diagnostic category, icon, device info |
+| `button` | Cancel alarm press, `IAlarmMkAlarmError` → `HomeAssistantError` |
+| `__init__` | Setup success, connection / login errors → `ConfigEntryNotReady`, unload |
+| `const` | Domain, defaults, supported models |
