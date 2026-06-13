@@ -49,9 +49,6 @@
       }
     },
     "sensor": {
-      "last_poll": {
-        "name": "Last Poll"
-      },
       "panel_ip": {
         "name": "Panel IP"
       }

@@ -1,7 +1,7 @@
 """Diagnostic sensor entities for iAlarm-MK."""
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
@@ -20,7 +20,6 @@ async def async_setup_entry(
 ) -> None:
     coordinator: IAlarmMkCoordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities([
-        IAlarmMkLastPollSensor(coordinator),
         IAlarmMkPanelIpSensor(coordinator),
     ])
 
@@ -32,31 +31,6 @@ def _device_info(coordinator: IAlarmMkCoordinator) -> DeviceInfo:
         manufacturer="Antifurto365 / Meian Technology",
         model=f"iAlarm {coordinator.model}",
     )
-
-
-class IAlarmMkLastPollSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
-    """Timestamp of the last successful coordinator poll."""
-
-    _attr_has_entity_name = True
-    _attr_translation_key = "last_poll"
-    _attr_device_class = SensorDeviceClass.TIMESTAMP
-    _attr_entity_category = EntityCategory.DIAGNOSTIC
-
-    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
-        super().__init__(coordinator)
-        self._attr_unique_id = f"{coordinator.network_info.mac}_last_poll"
-
-    @property
-    def available(self) -> bool:
-        return True
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        return _device_info(self.coordinator)
-
-    @property
-    def native_value(self):
-        return self.coordinator.last_successful_poll
 
 
 class IAlarmMkPanelIpSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):

@@ -4,13 +4,12 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-from homeassistant.util import dt as dt_util
 
 from open_ialarm_mk_local_api import (
     AlarmStatusEnum,
@@ -60,8 +59,6 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
         self.entry = entry
         self._push_client: IAlarmMkPushClient | None = None
         self._push_task: asyncio.Task | None = None
-        self.last_successful_poll: datetime | None = None
-
     @property
     def push_connected(self) -> bool:
         """True when the dedicated push TCP connection is established."""
@@ -109,7 +106,6 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                 if status.status == AlarmStatusEnum.UNAVAILABLE:
                     _LOGGER.warning("Status still UNAVAILABLE after retry, raising UpdateFailed")
                     raise UpdateFailed("iAlarm-MK returned UNAVAILABLE status after retry")
-            self.last_successful_poll = dt_util.utcnow()
             return IAlarmMkData(status=status, zones=zones)
         except (IAlarmMkConnectionError, IAlarmMkLoginError) as err:
             self._handle_poll_failure(err)

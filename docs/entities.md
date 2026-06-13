@@ -82,13 +82,6 @@ New zones are discovered automatically on each poll without reloading the integr
 
 ## Diagnostic Sensors
 
-### Last Poll
-
-**Class:** `IAlarmMkLastPollSensor`  
-**Unique ID:** `<mac>_last_poll`  
-**Device class:** `timestamp`  
-Timestamp of the last successful `_async_update_data` call. Always available (never goes unavailable).
-
 ### Panel IP
 
 **Class:** `IAlarmMkPanelIpSensor`  
