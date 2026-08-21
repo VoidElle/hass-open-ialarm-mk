@@ -1,4 +1,4 @@
-claude<div align="center">
+<div align="center">
   <img src="./assets/logo.png" alt="Logo" height="200">
   <br>
   <h1>🔒 Open iAlarm MK</h1>
