@@ -29,7 +29,7 @@ Communicates **entirely over your local network** via direct TCP connection to t
 
 | Firmware | Status | Notes |
 |---|---|---|
-| `V1.0.9F_SIA_TCP` (Sep 4 2025) | ✅ Confirmed compatible | |
+| `V1.0.9F_SIA_TCP` (04/09/2025) | ✅ Confirmed compatible | |
 | `V1.05F_SIA_TCP` | ❌ Not compatible | Does not expose a port |
 | `V1.13F` (12/08/2026) | ❌ Not compatible | Exposes port 6668 open, but does not answer to Meian commands |
 
