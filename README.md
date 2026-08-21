@@ -1,4 +1,4 @@
-<div align="center">
+claude<div align="center">
   <img src="./assets/logo.png" alt="Logo" height="200">
   <br>
   <h1>🔒 Open iAlarm MK</h1>
@@ -24,6 +24,17 @@ Communicates **entirely over your local network** via direct TCP connection to t
 > [!NOTE]
 > Support has been confirmed on **MK7** panels. Other MK variants may work but have not been tested.
 > For confirmed MK2 support, see [mistermax80/ialarm_mk2](https://github.com/mistermax80/ialarm_mk2).
+
+## Firmware Compatibility 🔧
+
+| Firmware | Status | Notes |
+|---|---|---|
+| `V1.0.9F_SIA_TCP` (Sep 4 2025) | ✅ Confirmed compatible | |
+| `V1.05F_SIA_TCP` | ❌ Not compatible | Does not expose a port |
+| `V1.13F` (12/08/2026) | ❌ Not compatible | Exposes port 6668 open, but does not answer to Meian commands |
+
+> [!TIP]
+> General rule: if your firmware exposes port **8000** as open, it should work.
 
 ## Installation 📦
 
