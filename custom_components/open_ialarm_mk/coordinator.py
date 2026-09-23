@@ -18,6 +18,7 @@ from open_ialarm_mk_local_api import (
     IAlarmMkConnectionError,
     IAlarmMkLoginError,
     IAlarmMkPushClient,
+    ZoneStatusEnum,
 )
 from open_ialarm_mk_local_api import ZoneStatusEnum
 from open_ialarm_mk_local_api.models.alarm_status_model import AlarmStatusModel
@@ -135,6 +136,10 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                         "status": new_status.name,
                     },
                 )
+<<<<<<< HEAD
+=======
+                await asyncio.sleep(0.01)
+>>>>>>> 6cabbf5 (feat: expose triggered zone from push alarm events)
 
             self.async_set_updated_data(
                 IAlarmMkData(
