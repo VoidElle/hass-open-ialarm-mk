@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from dataclasses import dataclass
 from datetime import timedelta
 
@@ -99,7 +100,9 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             alarm_time = event.get("Time")
             if cid is not None:
                 cid = str(cid)
-            if alarm_time is not None and not isinstance(alarm_time, str):
+            if isinstance(alarm_time, time.struct_time):
+                alarm_time = time.strftime("%Y-%m-%d %H:%M:%S", alarm_time)
+            elif alarm_time is not None and not isinstance(alarm_time, str):
                 alarm_time = str(alarm_time)
 
             previous = self.data
@@ -136,10 +139,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                         "status": new_status.name,
                     },
                 )
-<<<<<<< HEAD
-=======
                 await asyncio.sleep(0.01)
->>>>>>> 6cabbf5 (feat: expose triggered zone from push alarm events)
 
             self.async_set_updated_data(
                 IAlarmMkData(
