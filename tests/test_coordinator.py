@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import asyncio
+import time
+from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from open_ialarm_mk_local_api import (
     AlarmStatusEnum,
@@ -171,6 +174,43 @@ async def test_handle_panel_event_triggered_saves_zone(coordinator, hass):
     assert data.zones[0].status & ZoneStatusEnum.FAULT
     assert events and events[0]["zone"] == 1
     assert events[0]["zone_name"] == "Interna"
+
+
+async def test_handle_panel_event_triggered_converts_struct_time_to_utc(coordinator):
+    """TRIGGERED event with a struct_time Time is converted to a UTC datetime."""
+    zone = ZoneModel(1, "Interna", 1, ZoneStatusEnum.IN_USE)
+    coordinator.async_set_updated_data(
+        IAlarmMkData(
+            status=AlarmStatusModel(status=AlarmStatusEnum.DISARMED),
+            zones=[zone],
+        )
+    )
+    struct_time_value = time.struct_time((2026, 9, 22, 0, 47, 44, 0, 0, 0))
+
+    await coordinator._async_handle_panel_event(
+        {"Cid": 1132, "Zone": 1, "ZoneName": "Interna", "Time": struct_time_value}
+    )
+
+    data = coordinator.data
+    assert data.last_alarm_time == "2026-09-22 00:47:44"
+    assert data.last_alarm_time_utc == dt_util.as_utc(datetime(2026, 9, 22, 0, 47, 44))
+
+
+async def test_handle_panel_event_triggered_without_struct_time_leaves_utc_none(coordinator):
+    """TRIGGERED event with a non-struct_time Time leaves last_alarm_time_utc as None."""
+    zone = ZoneModel(1, "Interna", 1, ZoneStatusEnum.IN_USE)
+    coordinator.async_set_updated_data(
+        IAlarmMkData(
+            status=AlarmStatusModel(status=AlarmStatusEnum.DISARMED),
+            zones=[zone],
+        )
+    )
+
+    await coordinator._async_handle_panel_event(
+        {"Cid": 1132, "Zone": 1, "ZoneName": "Interna", "Time": "2026-09-21 22:11:57"}
+    )
+
+    assert coordinator.data.last_alarm_time_utc is None
 
 
 async def test_handle_panel_event_disarm_preserves_last_alarm(coordinator):

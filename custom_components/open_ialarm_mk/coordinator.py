@@ -5,12 +5,13 @@ import asyncio
 import logging
 import time
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from open_ialarm_mk_local_api import (
     AlarmStatusEnum,
@@ -39,6 +40,7 @@ class IAlarmMkData:
     last_alarm_zone_name: str | None = None
     last_alarm_cid: str | None = None
     last_alarm_time: str | None = None
+    last_alarm_time_utc: datetime | None = None
 
 
 class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
@@ -97,12 +99,14 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             zone_name = event.get("ZoneName")
             cid = event.get("Cid")
             alarm_time = event.get("Time")
-            if cid is not None:
-                cid = str(cid)
+            alarm_time_utc: datetime | None = None
             if isinstance(alarm_time, time.struct_time):
+                alarm_time_utc = dt_util.as_utc(datetime(*alarm_time[:6]))
                 alarm_time = time.strftime("%Y-%m-%d %H:%M:%S", alarm_time)
             elif alarm_time is not None and not isinstance(alarm_time, str):
                 alarm_time = str(alarm_time)
+            if cid is not None:
+                cid = str(cid)
 
             previous = self.data
             zones = previous.zones
@@ -110,12 +114,14 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
             last_alarm_zone_name = previous.last_alarm_zone_name
             last_alarm_cid = previous.last_alarm_cid
             last_alarm_time = previous.last_alarm_time
+            last_alarm_time_utc = previous.last_alarm_time_utc
 
             if new_status is AlarmStatusEnum.TRIGGERED and zone is not None:
                 last_alarm_zone = zone
                 last_alarm_zone_name = zone_name
                 last_alarm_cid = cid
                 last_alarm_time = alarm_time
+                last_alarm_time_utc = alarm_time_utc
                 if isinstance(zone, int):
                     zones = [
                         ZoneModel(
@@ -148,6 +154,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                     last_alarm_zone_name=last_alarm_zone_name,
                     last_alarm_cid=last_alarm_cid,
                     last_alarm_time=last_alarm_time,
+                    last_alarm_time_utc=last_alarm_time_utc,
                 )
             )
         else:
@@ -174,6 +181,7 @@ class IAlarmMkCoordinator(DataUpdateCoordinator[IAlarmMkData]):
                 last_alarm_zone_name=previous.last_alarm_zone_name if previous else None,
                 last_alarm_cid=previous.last_alarm_cid if previous else None,
                 last_alarm_time=previous.last_alarm_time if previous else None,
+                last_alarm_time_utc=previous.last_alarm_time_utc if previous else None,
             )
         except (IAlarmMkConnectionError, IAlarmMkLoginError) as err:
             self._handle_poll_failure(err)

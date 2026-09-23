@@ -88,6 +88,30 @@ New zones are discovered automatically on each poll without reloading the integr
 **Unique ID:** `<mac>_panel_ip`  
 IP address reported by the panel via `get_network_info` at setup. Static; does not update after setup.
 
+### Last Alarm Zone
+
+**Class:** `IAlarmMkLastAlarmZoneSensor`  
+**Unique ID:** `<mac>_last_alarm_zone`  
+Zone index (int) that triggered the most recent real alarm. Populated only after the first real `TRIGGERED` alarm push event with a known zone is received; state is `unknown` before that. Persists its last known value across polls and disarm events - it only updates on the next real alarm trigger.
+
+### Last Alarm Zone Name
+
+**Class:** `IAlarmMkLastAlarmZoneNameSensor`  
+**Unique ID:** `<mac>_last_alarm_zone_name`  
+Name of the zone that triggered the most recent real alarm. Same lifecycle as Last Alarm Zone: `unknown` until the first real triggered alarm event, then persists until the next trigger.
+
+### Last Alarm CID
+
+**Class:** `IAlarmMkLastAlarmCidSensor`  
+**Unique ID:** `<mac>_last_alarm_cid`  
+Contact-ID code of the most recent real alarm event. Same lifecycle as Last Alarm Zone: `unknown` until the first real triggered alarm event, then persists until the next trigger.
+
+### Last Alarm Time
+
+**Class:** `IAlarmMkLastAlarmTimeSensor`  
+**Unique ID:** `<mac>_last_alarm_time`  
+Timestamp (UTC, timezone-aware) of the most recent real alarm trigger. `device_class: timestamp`. Same lifecycle as Last Alarm Zone: `unknown` until the first real triggered alarm event, then persists until the next trigger.
+
 ---
 
 ## Button

@@ -51,6 +51,18 @@
     "sensor": {
       "panel_ip": {
         "name": "IP Pannello"
+      },
+      "last_alarm_zone": {
+        "name": "Ultima Zona in Allarme"
+      },
+      "last_alarm_zone_name": {
+        "name": "Nome Ultima Zona in Allarme"
+      },
+      "last_alarm_cid": {
+        "name": "Ultimo CID Allarme"
+      },
+      "last_alarm_time": {
+        "name": "Ultimo Orario Allarme"
       }
     },
     "binary_sensor": {

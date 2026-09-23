@@ -100,6 +100,7 @@ To update credentials later, use **Reconfigure** from the integration page - no 
 - 🚪 **Zone binary sensors** - one sensor per configured zone with automatic device class detection
 - 📡 **Fully local** - direct TCP connection to the panel, no internet required
 - ⚡ **Real-time push events** - dedicated push TCP connection delivers alarm events instantly (triggered, armed, disarmed) without polling delay
+- 🕵️ **Last alarm diagnostics** - zone, zone name, Contact-ID code, and timestamp of the most recent real alarm trigger, exposed as dedicated diagnostic sensors
 - 🔄 **Configurable poll interval** - 10 to 300 seconds (polling used as fallback/confirmation)
 - 🛠️ **Reconfigurable** - update host and credentials without removing the integration
 - 🆔 **Unique ID** - panel MAC address prevents duplicate entries
@@ -154,6 +155,10 @@ The following entities are available under the device page (collapsed by default
 | Push Connection | Binary sensor | Whether the real-time push TCP connection is alive |
 | Last Poll | Sensor | Timestamp of the last successful data poll |
 | Panel IP | Sensor | IP address reported by the panel |
+| Last Alarm Zone | Sensor | Zone index that triggered the most recent real alarm |
+| Last Alarm Zone Name | Sensor | Name of the zone that triggered the most recent real alarm |
+| Last Alarm CID | Sensor | Contact-ID code of the most recent real alarm event |
+| Last Alarm Time | Sensor | Timestamp (UTC) of the most recent real alarm trigger |
 
 ### Cancel Alarm Button
 

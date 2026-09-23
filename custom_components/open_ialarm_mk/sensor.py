@@ -1,7 +1,9 @@
 """Diagnostic sensor entities for iAlarm-MK."""
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorEntity
+from datetime import datetime
+
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
@@ -21,6 +23,10 @@ async def async_setup_entry(
     coordinator: IAlarmMkCoordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities([
         IAlarmMkPanelIpSensor(coordinator),
+        IAlarmMkLastAlarmZoneSensor(coordinator),
+        IAlarmMkLastAlarmZoneNameSensor(coordinator),
+        IAlarmMkLastAlarmCidSensor(coordinator),
+        IAlarmMkLastAlarmTimeSensor(coordinator),
     ])
 
 
@@ -49,3 +55,88 @@ class IAlarmMkPanelIpSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity
     @property
     def device_info(self) -> DeviceInfo:
         return _device_info(self.coordinator)
+
+
+class IAlarmMkLastAlarmZoneSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
+    """Zone index of the last triggered alarm."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "last_alarm_zone"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:shield-alert-outline"
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_last_alarm_zone"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def native_value(self) -> int | None:
+        return self.coordinator.data.last_alarm_zone if self.coordinator.data else None
+
+
+class IAlarmMkLastAlarmZoneNameSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
+    """Zone name of the last triggered alarm."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "last_alarm_zone_name"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:map-marker-alert-outline"
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_last_alarm_zone_name"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def native_value(self) -> str | None:
+        return self.coordinator.data.last_alarm_zone_name if self.coordinator.data else None
+
+
+class IAlarmMkLastAlarmCidSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
+    """CID code of the last triggered alarm."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "last_alarm_cid"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:identifier"
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_last_alarm_cid"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def native_value(self) -> str | None:
+        return self.coordinator.data.last_alarm_cid if self.coordinator.data else None
+
+
+class IAlarmMkLastAlarmTimeSensor(CoordinatorEntity[IAlarmMkCoordinator], SensorEntity):
+    """Timestamp of the last triggered alarm."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "last_alarm_time"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:clock-alert-outline"
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+
+    def __init__(self, coordinator: IAlarmMkCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.network_info.mac}_last_alarm_time"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return _device_info(self.coordinator)
+
+    @property
+    def native_value(self) -> datetime | None:
+        return self.coordinator.data.last_alarm_time_utc if self.coordinator.data else None
