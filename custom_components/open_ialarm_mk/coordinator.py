@@ -21,7 +21,6 @@ from open_ialarm_mk_local_api import (
     IAlarmMkPushClient,
     ZoneStatusEnum,
 )
-from open_ialarm_mk_local_api import ZoneStatusEnum
 from open_ialarm_mk_local_api.models.alarm_status_model import AlarmStatusModel
 from open_ialarm_mk_local_api.models.network_info_model import NetworkInfoModel
 from open_ialarm_mk_local_api.models.zone_model import ZoneModel

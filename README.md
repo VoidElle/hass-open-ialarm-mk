@@ -36,6 +36,9 @@ Communicates **entirely over your local network** via direct TCP connection to t
 > [!TIP]
 > General rule: if your firmware exposes port **8000** as open, it should work.
 
+> [!TIP]
+> If your firmware is **not compatible** with a direct local connection, you can still use this integration by pointing it at the IP address and port of the cloud server your panel is configured to use. These details can be found in the panel's settings in the iAlarm MK app. Configure the integration with that IP and port instead of the panel's local IP.
+
 ## Installation 📦
 
 ### Via HACS (Recommended) ⭐
